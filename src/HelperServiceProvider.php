@@ -53,7 +53,7 @@ class HelperServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../app/Http/Helper/DateTimeHelper.php' => app_path('Http/Helper/DateTimeHelper.php'),
+                __DIR__ . '/../src/DateTimeHelper.php' => app_path('Http/Helper/DateTimeHelper.php'),
             ], 'helper');
         }
     }
