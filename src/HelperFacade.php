@@ -13,6 +13,6 @@ class HelperFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'helper';
+        return 'helpers';
     }
 }
