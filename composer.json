@@ -1,0 +1,36 @@
+{
+    "name": "iproat/helpers",
+    "description": "Helper Snippets for simple math calculations and conversions.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Iproat\\Helpers\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Hari-2kd2",
+            "email": "hari9578@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "laravel/framework": "~5.0|~6.0|~7.0|~8.0|^9.0|^10.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "prefer-stable": true,
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Iproat\\Helpers\\HelperServiceProvider"
+            ],
+            "aliases": {
+                "Helpers":"Naray\\Autoshift\\HelperFacade"
+            }
+        }
+    }
+}
