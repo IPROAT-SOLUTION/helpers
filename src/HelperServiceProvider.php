@@ -6,42 +6,13 @@ class HelperServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
      * Bootstrap the application services.
      *
      * @return void
      */
     public function boot()
     {
-        //
-    }
-
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        $this->configure();
         $this->offerPublishing();
-        $this->registerCommands();
-    }
-
-    /**
-     * Setup the configuration for Helpers.
-     *
-     * @return void
-     */
-    protected function configure()
-    {
-        $this->mergeConfigFrom(__DIR__ . '/../src/DateTimeHelper.php', 'helper');
     }
 
     /**
@@ -53,22 +24,8 @@ class HelperServiceProvider extends \Illuminate\Support\ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../src/DateTimeHelper.php' => app_path('Http/Helper/DateTimeHelper.php'),
-            ], 'helper');
-        }
-    }
-
-    /**
-     * Register the Helpers commands.
-     *
-     * @return void
-     */
-    protected function registerCommands()
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                //
-            ]);
+                __DIR__ . '/../src/Helpers/DateTimeHelper.php' => app_path('Helpers/DateTimeHelper.php'),
+            ], 'helpers');
         }
     }
 }
