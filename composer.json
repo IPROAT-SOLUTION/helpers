@@ -32,5 +32,8 @@
                 "Helpers":"Naray\\Autoshift\\HelperFacade"
             }
         }
-    }
+    },
+    "files": [
+        "src/Helpers/DateTimeHelper.php"
+    ]
 }
