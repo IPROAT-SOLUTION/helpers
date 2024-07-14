@@ -41,7 +41,7 @@ class HelperServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     protected function configure()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../app/Http/Helper/DateTimeHelper.php', 'helper');
+        $this->mergeConfigFrom(__DIR__ . '/../src/DateTimeHelper.php', 'helper');
     }
 
     /**
