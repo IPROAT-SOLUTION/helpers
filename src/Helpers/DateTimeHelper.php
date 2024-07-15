@@ -271,15 +271,16 @@ if (!function_exists('convertNumberToColumnName')) {
  * Divide a time string in HH:MM:SS by two.
  *
  * @param string $timeString Time in HH:MM:SS format.
+ * @param int $value Value in integer format.
  * @return string Divided time in HH:MM:SS format.
  */
-if (!function_exists('divideTimeStringByTwo')) {
+if (!function_exists('divideTimeStringByHalf')) {
 
-    function divideTimeStringByTwo(string $timeString): string
+    function divideTimeStringByHalf(string $timeString, int $value): string
     {
         list($hours, $minutes, $seconds) = explode(':', $timeString);
         $totalSeconds = $hours * 3600 + $minutes * 60 + $seconds;
-        $totalSeconds /= 2;
+        $totalSeconds /= $value;
 
         $hours = floor($totalSeconds / 3600);
         $minutes = floor(($totalSeconds % 3600) / 60);
