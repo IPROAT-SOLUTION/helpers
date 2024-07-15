@@ -1,19 +1,18 @@
 <?php
 
-use Illuminate\Support\Collection;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Pagination\LengthAwarePaginator;
-
 /**
  * Convert a time string in HH:MM:SS format to minutes.
  *
  * @param string $time Time in HH:MM:SS format.
  * @return float Time in minutes.
  */
-function convertTimeToMinutes(string $time): float
-{
-    $timeParts = explode(':', $time);
-    return ($timeParts[0] * 60) + ($timeParts[1]) + ($timeParts[2] / 60);
+if (!function_exists('convertTimeToMinutes')) {
+
+    function convertTimeToMinutes(string $time): float
+    {
+        $timeParts = explode(':', $time);
+        return ($timeParts[0] * 60) + ($timeParts[1]) + ($timeParts[2] / 60);
+    }
 }
 
 /**
@@ -22,13 +21,16 @@ function convertTimeToMinutes(string $time): float
  * @param string $date Date in d/m/Y or similar format.
  * @return string|null Formatted date or null if input is empty.
  */
-function formatDateForDatabase(string $date): ?string
-{
-    if (!empty($date)) {
-        return date("Y-m-d", strtotime(str_replace('/', '-', $date)));
+if (!function_exists('formatDateForDatabase')) {
+    function formatDateForDatabase(string $date): ?string
+    {
+        if (!empty($date)) {
+            return date("Y-m-d", strtotime(str_replace('/', '-', $date)));
+        }
+        return null;
     }
-    return null;
 }
+
 
 /**
  * Convert a month string to database format (Y-m).
@@ -36,12 +38,15 @@ function formatDateForDatabase(string $date): ?string
  * @param string $month Month in d/m/Y or similar format.
  * @return string|null Formatted month or null if input is empty.
  */
-function formatMonthForDatabase(string $month): ?string
-{
-    if (!empty($month)) {
-        return date("Y-m", strtotime(str_replace('/', '-', $month)));
+if (!function_exists('formatMonthForDatabase')) {
+
+    function formatMonthForDatabase(string $month): ?string
+    {
+        if (!empty($month)) {
+            return date("Y-m", strtotime(str_replace('/', '-', $month)));
+        }
+        return null;
     }
-    return null;
 }
 
 /**
@@ -50,13 +55,16 @@ function formatMonthForDatabase(string $month): ?string
  * @param string $date Date in Y-m-d format.
  * @return string|null Formatted date or null if input is empty.
  */
-function formatDateToForm(string $date): ?string
-{
-    if (!empty($date)) {
-        $dateTimestamp = strtotime($date);
-        return date('d/m/Y', $dateTimestamp);
+if (!function_exists('formatDateToForm')) {
+
+    function formatDateToForm(string $date): ?string
+    {
+        if (!empty($date)) {
+            $dateTimestamp = strtotime($date);
+            return date('d/m/Y', $dateTimestamp);
+        }
+        return null;
     }
-    return null;
 }
 
 /**
@@ -65,23 +73,26 @@ function formatDateToForm(string $date): ?string
  * @param string $month Month in Y-m format.
  * @return array List of dates with additional info.
  */
-function generateMonthDateRange(string $month): array
-{
-    $startDate = $month . '-01';
-    $endDate = date("Y-m-t", strtotime($startDate));
+if (!function_exists('generateMonthDateRange')) {
 
-    $target = strtotime($startDate);
-    $workingDates = [];
+    function generateMonthDateRange(string $month): array
+    {
+        $startDate = $month . '-01';
+        $endDate = date("Y-m-t", strtotime($startDate));
 
-    while ($target <= strtotime($endDate)) {
-        $workingDates[] = [
-            'date' => date('Y-m-d', $target),
-            'day' => date('d', $target),
-            'day_name' => date('D', $target),
-        ];
-        $target += (60 * 60 * 24);
+        $target = strtotime($startDate);
+        $workingDates = [];
+
+        while ($target <= strtotime($endDate)) {
+            $workingDates[] = [
+                'date' => date('Y-m-d', $target),
+                'day' => date('d', $target),
+                'day_name' => date('D', $target),
+            ];
+            $target += (60 * 60 * 24);
+        }
+        return $workingDates;
     }
-    return $workingDates;
 }
 
 /**
@@ -91,16 +102,19 @@ function generateMonthDateRange(string $month): array
  * @param string $end_date End date in Y-m-d format.
  * @return array List of dates in the range.
  */
-function generateDateRange(string $start_date, string $end_date): array
-{
-    $target = strtotime($start_date);
-    $workingDates = [];
+if (!function_exists('generateDateRange')) {
 
-    while ($target <= strtotime($end_date)) {
-        $workingDates[] = date('Y-m-d', $target);
-        $target += (60 * 60 * 24);
+    function generateDateRange(string $start_date, string $end_date): array
+    {
+        $target = strtotime($start_date);
+        $workingDates = [];
+
+        while ($target <= strtotime($end_date)) {
+            $workingDates[] = date('Y-m-d', $target);
+            $target += (60 * 60 * 24);
+        }
+        return $workingDates;
     }
-    return $workingDates;
 }
 
 /**
@@ -110,10 +124,13 @@ function generateDateRange(string $start_date, string $end_date): array
  * @param string $format Format to validate against.
  * @return bool True if valid, false otherwise.
  */
-function isValidDate(string $date, string $format = 'Y-m-d'): bool
-{
-    $d = DateTime::createFromFormat($format, $date);
-    return $d && $d->format($format) === $date;
+if (!function_exists('isValidDate')) {
+
+    function isValidDate(string $date, string $format = 'Y-m-d'): bool
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) === $date;
+    }
 }
 
 /**
@@ -124,14 +141,17 @@ function isValidDate(string $date, string $format = 'Y-m-d'): bool
  * @param string|null $interval Interval for date period.
  * @return array Array of DateTime objects in the range.
  */
-function createDateRange(string $begin, string $end, string $interval = null): array
-{
-    $begin = new DateTime($begin);
-    $end = new DateTime($end);
-    $end = $end->modify('+1 day');
-    $interval = new DateInterval($interval ?: 'P1D');
+if (!function_exists('createDateRange')) {
 
-    return iterator_to_array(new DatePeriod($begin, $interval, $end));
+    function createDateRange(string $begin, string $end, string $interval = null): array
+    {
+        $begin = new DateTime($begin);
+        $end = new DateTime($end);
+        $end = $end->modify('+1 day');
+        $interval = new DateInterval($interval ?: 'P1D');
+
+        return iterator_to_array(new DatePeriod($begin, $interval, $end));
+    }
 }
 
 /**
@@ -141,22 +161,25 @@ function createDateRange(string $begin, string $end, string $interval = null): a
  * @param bool $hours Return total hours only if true.
  * @return string Total time in HH:MM:SS format.
  */
-function sumTimeArray(array $array, bool $hours = false): string
-{
-    $sum = strtotime('00:00:00');
-    $totalTime = 0;
+if (!function_exists('sumTimeArray')) {
 
-    foreach ($array as $element) {
-        $timeInSeconds = strtotime($element) - $sum;
-        $totalTime += $timeInSeconds;
+    function sumTimeArray(array $array, bool $hours = false): string
+    {
+        $sum = strtotime('00:00:00');
+        $totalTime = 0;
+
+        foreach ($array as $element) {
+            $timeInSeconds = strtotime($element) - $sum;
+            $totalTime += $timeInSeconds;
+        }
+
+        $h = sprintf('%02d', intval($totalTime / 3600));
+        $totalTime -= ($h * 3600);
+        $m = sprintf('%02d', intval($totalTime / 60));
+        $s = sprintf('%02d', $totalTime - ($m * 60));
+
+        return $hours ? $h : "$h:$m:$s";
     }
-
-    $h = sprintf('%02d', intval($totalTime / 3600));
-    $totalTime -= ($h * 3600);
-    $m = sprintf('%02d', intval($totalTime / 60));
-    $s = sprintf('%02d', $totalTime - ($m * 60));
-
-    return $hours ? $h : "$h:$m:$s";
 }
 
 /**
@@ -165,10 +188,13 @@ function sumTimeArray(array $array, bool $hours = false): string
  * @param string $time Time in HH:MM:SS format.
  * @return float Time in decimal hours.
  */
-function convertTimeToDecimalHours(string $time): float
-{
-    $hms = explode(":", $time);
-    return ($hms[0] + ($hms[1] / 60) + ($hms[2] / 3600));
+if (!function_exists('convertTimeToDecimalHours')) {
+
+    function convertTimeToDecimalHours(string $time): float
+    {
+        $hms = explode(":", $time);
+        return ($hms[0] + ($hms[1] / 60) + ($hms[2] / 3600));
+    }
 }
 
 /**
@@ -177,17 +203,20 @@ function convertTimeToDecimalHours(string $time): float
  * @param string $string Input string.
  * @return string Acronym in uppercase.
  */
-function generateAcronym(string $string = ''): string
-{
-    $words = explode(' ', trim($string));
-    if (!$words) {
-        return '';
+if (!function_exists('generateAcronym')) {
+
+    function generateAcronym(string $string = ''): string
+    {
+        $words = explode(' ', trim($string));
+        if (!$words) {
+            return '';
+        }
+        $result = '';
+        foreach ($words as $word) {
+            $result .= substr($word, 0, 1);
+        }
+        return strtoupper($result);
     }
-    $result = '';
-    foreach ($words as $word) {
-        $result .= substr($word, 0, 1);
-    }
-    return strtoupper($result);
 }
 
 /**
@@ -196,9 +225,12 @@ function generateAcronym(string $string = ''): string
  * @param string $dateTime DateTime string.
  * @return string Time in H:i format.
  */
-function extractTimeFromDateTime(string $dateTime): string
-{
-    return date('H:i', strtotime($dateTime));
+if (!function_exists('extractTimeFromDateTime')) {
+
+    function extractTimeFromDateTime(string $dateTime): string
+    {
+        return date('H:i', strtotime($dateTime));
+    }
 }
 
 /**
@@ -207,12 +239,15 @@ function extractTimeFromDateTime(string $dateTime): string
  * @param string $strHourMinute Time in HH:MM format.
  * @return int Total minutes.
  */
-function convertHourMinuteToMinutes(string $strHourMinute): int
-{
-    $from = date('Y-m-d 00:00:00');
-    $to = date('Y-m-d ' . $strHourMinute . ':00');
-    $diff = strtotime($to) - strtotime($from);
-    return (int)($diff / 60);
+if (!function_exists('convertHourMinuteToMinutes')) {
+
+    function convertHourMinuteToMinutes(string $strHourMinute): int
+    {
+        $from = date('Y-m-d 00:00:00');
+        $to = date('Y-m-d ' . $strHourMinute . ':00');
+        $diff = strtotime($to) - strtotime($from);
+        return (int)($diff / 60);
+    }
 }
 
 /**
@@ -221,12 +256,15 @@ function convertHourMinuteToMinutes(string $strHourMinute): int
  * @param int $num Column index (1-based).
  * @return string Column name (e.g., A, B, ..., Z, AA, AB, ...).
  */
-function convertNumberToColumnName(int $num): string
-{
-    $numeric = ($num - 1) % 26;
-    $letter = chr(65 + $numeric);
-    $num2 = intval(($num - 1) / 26);
-    return $num2 > 0 ? convertNumberToColumnName($num2) . $letter : $letter;
+if (!function_exists('convertNumberToColumnName')) {
+
+    function convertNumberToColumnName(int $num): string
+    {
+        $numeric = ($num - 1) % 26;
+        $letter = chr(65 + $numeric);
+        $num2 = intval(($num - 1) / 26);
+        return $num2 > 0 ? convertNumberToColumnName($num2) . $letter : $letter;
+    }
 }
 
 /**
@@ -235,31 +273,18 @@ function convertNumberToColumnName(int $num): string
  * @param string $timeString Time in HH:MM:SS format.
  * @return string Divided time in HH:MM:SS format.
  */
-function divideTimeStringByTwo(string $timeString): string
-{
-    list($hours, $minutes, $seconds) = explode(':', $timeString);
-    $totalSeconds = $hours * 3600 + $minutes * 60 + $seconds;
-    $totalSeconds /= 2;
+if (!function_exists('divideTimeStringByTwo')) {
 
-    $hours = floor($totalSeconds / 3600);
-    $minutes = floor(($totalSeconds % 3600) / 60);
-    $seconds = $totalSeconds % 60;
+    function divideTimeStringByTwo(string $timeString): string
+    {
+        list($hours, $minutes, $seconds) = explode(':', $timeString);
+        $totalSeconds = $hours * 3600 + $minutes * 60 + $seconds;
+        $totalSeconds /= 2;
 
-    return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
-}
+        $hours = floor($totalSeconds / 3600);
+        $minutes = floor(($totalSeconds % 3600) / 60);
+        $seconds = $totalSeconds % 60;
 
-/**
- * Paginate a collection or array of items.
- *
- * @param mixed $items Items to paginate.
- * @param int $perPage Number of items per page.
- * @param int|null $page Current page number.
- * @param array $options Additional options for pagination.
- * @return LengthAwarePaginator Paginated items.
- */
-function paginateItems($items, int $perPage = 5, int $page = null, array $options = []): LengthAwarePaginator
-{
-    $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-    $items = $items instanceof Collection ? $items : Collection::make($items);
-    return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+    }
 }
